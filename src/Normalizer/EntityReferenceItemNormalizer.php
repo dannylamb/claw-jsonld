@@ -106,6 +106,10 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
       $entity = $field_item->getEntity();
       $field_uri = $this->linkManager->getRelationUri($entity->getEntityTypeId(), $entity->bundle(), $field_name, $context);
       foreach ($field_keys as $field_name) {
+        // If there's no context, we need full predicates, not shortened ones.
+        if (!$context['needs_jsonldcontext']) {
+          $field_name = $this->escapePrefix($field_name, $context['namespaces']);
+        }
         $normalized_prop[$field_name] = array($values_clean);
       }
 
